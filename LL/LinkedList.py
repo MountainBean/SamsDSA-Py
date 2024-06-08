@@ -1,3 +1,12 @@
+# LinkedList implementation in Python using objects as Nodes
+#
+# All credit for this code goes to Scott Barrett and his Udemy course:
+# "Python Data Structures & Algorithms + LEETCODE Exercises"
+#
+# I've only put his code into a module and added docstrings as a learning
+# aide and so I can use these methods in other work if I need.
+
+
 class Node:
     def __init__(self, value) -> None:
         self.value = value
@@ -251,3 +260,43 @@ class LinkedList:
             temp.next = before
             before = temp
             temp = after
+
+    def find_middle_node(self) -> Node:
+        """
+        O(n)
+        Finds the middle item of the LinkedList.
+        Iteraters through the LinkedList with a fast and a slow pointer, the fast
+        moving two items along for every one item the slow pointer moves. When
+        the fast pointer is at the end, the slow pointer will be at the middle.
+
+        Returns:
+            Node: The middle node in the LinkedList. If the LinkedList length is an
+            even number, this be the first item of the 2nd half of the LinkedList. 
+            None if the List is empty
+        """
+        fast = self.head
+        slow = self.head
+        while fast is not None and fast.next is not None:
+            fast = fast.next.next
+            slow = slow.next
+        return slow
+
+    def has_loop(self) -> bool:
+        """
+        O(n)
+        Returns True if the LinkedList contains a loop.
+        Uses Floyd's Cycle-finding algorithm (also known as the Tortoise-and-the-
+        hare method) to 
+
+
+        Returns:
+            bool: _description_
+        """
+        fast = self.head
+        slow = self.head
+        while fast is not None and fast.next is not None:
+            fast = fast.next.next
+            slow = slow.next
+            if fast == slow:
+                return True
+        return False
