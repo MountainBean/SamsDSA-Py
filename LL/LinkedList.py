@@ -3,8 +3,9 @@
 # All credit for this code goes to Scott Barrett and his Udemy course:
 # "Python Data Structures & Algorithms + LEETCODE Exercises"
 #
-# I've only put his code into a module and added docstrings as a learning
-# aide and so I can use these methods in other work if I need.
+# I've writen this code following Barrett's guidance in his course and
+# added it into a module and added docstrings as a learning aide to
+# help me remember what I've learned
 
 
 class Node:
@@ -339,6 +340,7 @@ class LinkedList:
         to the front of the LinkedList. Relative order of the numbers is 
         maintained. This method assumes the LinkedList contains only numerical
         values (int or float).
+        Does not use the tail attribute.
 
         Args:
             x (Number): The value to partition the LinkedList with.
@@ -361,3 +363,69 @@ class LinkedList:
         prev2.next = None            # end the dummy2 chain
         prev1.next = dummy2.next
         self.head = dummy1.next
+
+    def remove_duplicates(self) -> None:
+        """
+        O(n)
+        Removes all duplicated values in the LinkedList.
+        Uses a Set (one of the 4 built-int data structures available in Python)
+        to store all the seen values. Iterates through the LinkedList, checking 
+        if the current value is in the set. If not, adds it to the set. If it is,
+        the item is removed from the LinkedList.
+        """
+        current = self.head
+        prev = self.head
+        values = set()
+        while current is not None:
+            if current.value not in values:
+                values.add(current.value)
+                prev = current
+            else:
+                prev.next = current.next
+                self.length -= 1
+            current = current.next
+
+    def binary_to_decimal(self) -> int:
+        """
+        O(n)
+        Assuming the LinkedList provides a binary representation of an integer, 
+        converts the binary to decimal.
+
+        Returns:
+            int: decimal value of the binary value represented in the linkedList
+        """
+        num = 0
+        current = self.head
+        while current is not None:
+            num = num * 2 + current.value
+            current = current.next
+        return num
+
+    def reverse_between(self, start_index: int, end_index: int) -> None:
+        """
+        O(n)
+        Reverses the order of the Nodes in the LinkedList between the indices
+        start_index and end_index (inclusive).
+
+        Args:
+            start_index (int): start of the Nodes to be reversed
+            end_index (int): end of the Nodes to be reversed
+        """
+        if self.length <= 1:
+            return
+        dummy = Node(0)
+        dummy.next = self.head
+        pre_start = dummy
+        loc = 0
+        while loc != start_index:
+            pre_start = pre_start.next
+            loc += 1
+        start = pre_start.next
+        loc += 1
+        while loc <= end_index:
+            end = start.next
+            start.next = end.next
+            end.next = pre_start.next
+            pre_start.next = end
+            loc += 1
+        self.head = dummy.next
