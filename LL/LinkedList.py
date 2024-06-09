@@ -264,7 +264,7 @@ class LinkedList:
     def find_middle_node(self) -> Node:
         """
         O(n)
-        Finds the middle item of the LinkedList.
+        Finds the middle item of the LinkedList (without using the length attribute).
         Iteraters through the LinkedList with a fast and a slow pointer, the fast
         moving two items along for every one item the slow pointer moves. When
         the fast pointer is at the end, the slow pointer will be at the middle.
@@ -286,11 +286,13 @@ class LinkedList:
         O(n)
         Returns True if the LinkedList contains a loop.
         Uses Floyd's Cycle-finding algorithm (also known as the Tortoise-and-the-
-        hare method) to 
+        hare method). A fast pointer moves down the list twice as fast as a slow 
+        pointer. If there is a loop, eventually the fast and slow pointers will be 
+        equal. Otherwise, the fast pointer will reach the end of the list.
 
 
         Returns:
-            bool: _description_
+            bool: True when there is a loop in the LinkedList.
         """
         fast = self.head
         slow = self.head
@@ -300,3 +302,62 @@ class LinkedList:
             if fast == slow:
                 return True
         return False
+
+    def find_kth_from_end(self, k: int) -> Node:
+        """
+        O(n)
+        Finds and returns the Node in the LinkedList k Nodes away from the end.
+        Uses the two-pointer method to traverse the list. 1st pointer gets a 
+        head-start of k places, then both pointers move at the same speed until
+        the 1st pointer reaches the end of the LinkedList. The 2nd pointer will
+        then be at the kth position from the end.
+
+        Args:
+            k (int): Position from the end of the LinkedList of the Node to be 
+            returned
+
+        Returns:
+            Node: The item k places away from the end of the LinkedList
+        """
+        slow = self.head
+        fast = self.head
+        fast_index = 0
+        while fast_index is not k:
+            if fast is None:
+                return None
+            fast = fast.next
+            fast_index += 1
+        while fast is not None:
+            fast = fast.next
+            slow = slow.next
+        return slow
+
+    def partition_list(self, x) -> None:
+        """
+        O(n)
+        Edits the LinkedList in place. Moves all Nodes with values less than x 
+        to the front of the LinkedList. Relative order of the numbers is 
+        maintained. This method assumes the LinkedList contains only numerical
+        values (int or float).
+
+        Args:
+            x (Number): The value to partition the LinkedList with.
+        """
+        if self.head is None:
+            return None
+        dummy1 = Node(0)
+        prev1 = dummy1
+        dummy2 = Node(0)
+        prev2 = dummy2
+        current = self.head
+        while current is not None:
+            if current.value < x:
+                prev1.next = current
+                prev1 = current
+            else:
+                prev2.next = current
+                prev2 = current
+            current = current.next
+        prev2.next = None            # end the dummy2 chain
+        prev1.next = dummy2.next
+        self.head = dummy1.next
