@@ -191,3 +191,101 @@ class DoublyLinkedList:
             temp.value = value
             return True
         return False
+
+    def insert(self, index: int, value: object) -> bool:
+        """
+        O(n)
+        Creates a new node and places it at the given index in the
+        DoublyLinkedList, shifting the following Nodes down by one.
+
+        Args:
+            index (int): The location in the DoublyLinkedList to insert the given value
+            value (object): The new Node value
+
+        Returns:
+            bool: True when successful
+        """
+        if index < 0 or index > self.length:
+            return False
+        if index == 0:
+            return self.prepend(value)
+        if index == self.length:
+            return self.append(value)
+        new_node = Double_Node(value)
+        before = self.get(index - 1)
+        after = before.next
+        after.prev = new_node
+        new_node.next = after
+        new_node.prev = before
+        before.next = new_node
+        self.length += 1
+        return True
+
+    def remove(self, index: int) -> Double_Node:
+        """
+        O(n)
+        Removes the DoubleNode from the given index in the DoublyLinkedList
+
+        Args:
+            index (int): The location of the Double_Node to be removed
+
+        Returns:
+            Double_Node: The removed Node. None if DLL is empty
+        """
+        if index < 0 or index >= self.length:
+            return None
+        if index == 0:
+            return self.pop_first()
+        if index == self.length - 1:
+            return self.pop()
+        temp = self.get(index)
+        temp.next.prev = temp.prev
+        temp.prev.next = temp.next
+        temp.next = None
+        temp.prev = None
+        self.length -= 1
+        return temp
+
+    def swap_first_last(self) -> None:
+        """
+        O(1)
+        Uses tuples to exchange the values of the Nodes, rather than the pointers.
+        This question was a mislead. Sometimes just changing the values is easiest.
+        """
+        # 1. Check if the doubly linked list is empty or has only one node.
+        # If so, there's nothing to swap, hence exit the function early.
+        if self.head is None or self.head == self.tail:
+            return
+
+        # 2. If the list has more than one node, swap the values of the
+        # head (first node) and tail (last node).
+        # Note: We're only exchanging the data stored in the nodes,
+        # rather than altering the structure of the linked list itself.
+        self.head.value, self.tail.value = self.tail.value, self.head.value
+
+    def reverse(self) -> None:
+        """
+        (O)n
+        Iterates down the DoublyLinkedList, reversing the direction of the pointers
+        so the DoublyLinkedList is reversed and the head and tail pointers are
+        swapped
+        """
+        if self.length <= 1:
+            return
+        current = self.head
+        for _ in range(self.length):
+            current.prev, current.next = current.next, current.prev
+            current = current.prev
+        self.head, self.tail = self.tail, self.head
+
+    def is_palindrome(self):
+        front = self.head
+        back = self.tail
+        i = 0                               # This could also have been done in a
+        while i < self.length/2:            # for loop with the "//" operator
+            if front.value != back.value:
+                return False
+            front = front.next
+            back = back.prev
+            i += 1
+        return True
