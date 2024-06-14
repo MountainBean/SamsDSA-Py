@@ -33,12 +33,16 @@ class Queue:
         else:
             self.last.next = new_node
             self.last = new_node
-            return True
+        self.length += 1
+        return True
 
     def dequeue(self) -> Q_Node:
         if self.length == 0:
             return None
         temp = self.first
+        if self.length == 1:
+            self.last = None
         self.first = self.first.next
         temp.next = None
+        self.length -= 1
         return temp
