@@ -1,4 +1,12 @@
 class MaxHeap:
+    """
+    O(log n)
+    Python implementation of a heap with max values always at the root. Very similar to a 
+    binary search tree. It is a binary tree but the values aren't arranged in the same
+    manner. The highest values go at the root of the tree and remove() only ever takes the 
+    root value.
+    """
+
     def __init__(self) -> None:
         self.heap = []
 
@@ -32,6 +40,13 @@ class MaxHeap:
             current = self._parent(current)
 
     def remove(self):
+        """
+        O(log n)
+        Removes the value at the root of the heap (the highest value).
+
+        Returns:
+            _type_: the removed root value
+        """
         if len(self.heap) == 0:
             return None
         if len(self.heap) == 1:
