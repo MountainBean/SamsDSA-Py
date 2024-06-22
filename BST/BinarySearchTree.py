@@ -74,3 +74,28 @@ class BinarySearchTree:
             else:
                 return True
         return False
+
+    def r_contains(self, value: int) -> bool:
+        """
+        Recursively searches the binary tree for a given value.
+        Calls the private recursive function __r_contains() at the root node.
+
+        Args:
+            value (int): Value to search for in the BST
+
+        Returns:
+            bool: True if value is in the BST
+        """
+        return self.__r_contains(self.root, value)
+
+    def __r_contains(self, node, value):
+        if node == None:
+            return False
+        if node.value == value:
+            return True
+        if value < node.value:
+            # calls itself on the left (smaller) child node
+            return self.__r_contains(node.left, value)
+        if value > node.value:
+            # calls itself on the right (larger) child node
+            return self.__r_contains(node.right, value)

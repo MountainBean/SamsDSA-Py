@@ -171,3 +171,26 @@ def group_anagrams(strings):
         else:
             anagram_groups[canonical] = [string]
     return list(anagram_groups.values())
+
+
+def two_sum(nums: list[int], target: int) -> list[int]:
+    """
+    O(n)
+    Takes a list of integers and a number and returns the two integers in the list that
+    add up to make the target number. 
+    Iterates through the list only once.
+
+    Args:
+        nums (list[int]): list of ints
+        target (int): target int that can be reached by summing two items in nums
+
+    Returns:
+        list[int]: two ints from nums that add up to make target
+    """
+    compliments = {}
+    out = []
+    for i, num in enumerate(nums):
+        if num in compliments:
+            out = [compliments[num], i]
+        compliments[target - num] = i
+    return out
