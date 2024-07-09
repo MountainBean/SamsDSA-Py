@@ -1,7 +1,7 @@
 class MaxHeap:
     """
     O(log n)
-    Python implementation of a heap with max values always at the root. Very similar to a 
+    Python implementation of a heap with the max value always at the root. Very similar to a 
     binary search tree. It is a binary tree but the values aren't arranged in the same
     manner. The highest values go at the root of the tree and remove() only ever takes the 
     root value.

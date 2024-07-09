@@ -1,3 +1,6 @@
+from LL.Queue import Queue, Q_Node
+
+
 class Node:
     def __init__(self, value: int) -> None:
         """
@@ -99,3 +102,113 @@ class BinarySearchTree:
         if value > node.value:
             # calls itself on the right (larger) child node
             return self.__r_contains(node.right, value)
+
+    def r_insert(self, value):
+        if self.root == None:
+            self.root = Node(value)
+        self.__r_insert(self.root, value)
+
+    def __r_insert(self, node, value):
+        if node == None:
+            return Node(value)
+        if value < node.value:
+            node.left = self.__r_insert(node.left, value)
+        if value > node.value:
+            node.right = self.__r_insert(node.right, value)
+        return node
+
+    def min_value(self, current_node: Node) -> int:
+        """
+        O(log n)
+        Minimum value in the tree from the current node as the root.
+        As this is a BST, this just means we take the left pointer 
+        until there are no left pointers.
+
+        Args:
+            current_node (Node): A node to begin the search for the 
+            lowest-value node.
+
+        Returns:
+            int: vlaue of the minimum-value node in the tree
+        """
+        while current_node.left is not None:
+            current_node = current_node.left
+        return current_node.value
+
+    def delete_node(self, value):
+        self.root = self.__delete_node(self.root, value)
+
+    def __delete_node(self, current_node, value):
+        if current_node is None:
+            return None
+        elif value < current_node.value:
+            current_node.left = self.__delete_node(current_node.left, value)
+        elif value > current_node.value:
+            current_node.right = self.__delete_node(current_node.right, value)
+        if value == current_node.value:
+            if current_node.left is None and current_node.right is None:
+                return None
+            elif current_node.right is None:
+                return current_node.left
+            elif current_node.left is None:
+                return current_node.right
+            else:
+                current_node.value = self.min_value(current_node.right)
+                self.__delete_node(current_node.right, current_node.value)
+        return current_node
+
+    def BFS(self):
+        current_node = self.root
+        queue = Queue()
+        results = []
+        queue.enqueue(current_node)
+        while queue.length > 0:
+            current_node = queue.dequeue().value
+            results.append(current_node.value)
+            if current_node.left is not None:
+                queue.enqueue(current_node.left)
+            if current_node.right is not None:
+                queue.enqueue(current_node.right)
+        return results
+
+    def dfs_pre_order(self):
+        results = []
+
+        def traverse(current_node):
+            results.append(current_node.value)
+            if current_node.left is not None:
+                traverse(current_node.left)
+            if current_node.right is not None:
+                traverse(current_node.right)
+
+        traverse(self.root)
+
+        return results
+
+    def dfs_post_order(self):
+        results = []
+
+        def traverse(current_node):
+            if current_node.left is not None:
+                traverse(current_node.left)
+            if current_node.right is not None:
+                traverse(current_node.right)
+            results.append(current_node.value)
+
+        traverse(self.root)
+
+        return results
+
+    def dfs_in_order(self):
+        results = []
+
+        def traverse(current_node):
+            if current_node.left is not None:
+                traverse(current_node.left)
+            results.append(current_node.value)
+            if current_node.right is not None:
+                traverse(current_node.right)
+
+        traverse(self.root)
+
+        return results
